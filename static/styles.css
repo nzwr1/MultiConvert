@@ -1,0 +1,17 @@
+#progressContainer {
+    display: none;
+    margin-top: 20px;
+}
+#progressBar {
+    width: 0%;
+    height: 20px;
+    background-color: #4caf50;
+}
+#progressWrapper {
+    width: 100%;
+    background-color: #ddd;
+}
+#downloadBtn {
+    display: none;
+    margin-top: 15px;
+}
