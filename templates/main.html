@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>PDF a Word</title>
+  <style>
+    #progressContainer {
+      display: none;
+      margin-top: 20px;
+    }
+    #progressBar {
+      width: 0%;
+      height: 20px;
+      background-color: #4caf50;
+    }
+    #progressWrapper {
+      width: 100%;
+      background-color: #ddd;
+    }
+    #downloadBtn {
+      display: none;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Convertir PDF a Word</h2>
+  <input type="file" id="pdfFile" accept=".pdf" required>
+  <br><br>
+  <button onclick="convertPDF()">Convertir</button>
+
+  <div id="progressContainer">
+    <p>Convirtiendo PDF...</p>
+    <div id="progressWrapper">
+      <div id="progressBar"></div>
+    </div>
+  </div>
+
+  <button id="downloadBtn">Descargar Word</button>
+
+  <script>
+    async function convertPDF() {
+      const input = document.getElementById('pdfFile');
+      const file = input.files[0];
+      if (!file) {
+        alert("Selecciona un archivo PDF primero");
+        return;
+      }
+
+      // Muestra barra de progreso falsa
+      document.getElementById('progressContainer').style.display = 'block';
+      document.getElementById('downloadBtn').style.display = 'none';
+      simulateProgress();
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const response = await fetch("http://127.0.0.1:5000/pdf-to-word", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!response.ok) throw new Error("Error al convertir el PDF");
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+
+        // Muestra botón de descarga cuando termina
+        const downloadBtn = document.getElementById('downloadBtn');
+        downloadBtn.style.display = 'block';
+        downloadBtn.onclick = () => {
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = file.name.replace('.pdf', '.docx');
+          a.click();
+        };
+      } catch (error) {
+        alert("Fallo la conversión: " + error.message);
+      }
+    }
+
+    // Simulación de barra de progreso
+    function simulateProgress() {
+      const bar = document.getElementById('progressBar');
+      let width = 0;
+      const interval = setInterval(() => {
+        if (width >= 100) {
+          clearInterval(interval);
+        } else {
+          width += 1;
+          bar.style.width = width + '%';
+        }
+      }, 200); // Simula en ~20 segundos
+    }
+  </script>
+</body>
+</html>
+
