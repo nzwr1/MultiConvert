@@ -1,17 +1,59 @@
+html, body{
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    background-color: #d2e5f8;
+}
+
+.converter {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    margin: 50px auto;
+    max-width: 600px;
+    padding: 30px;
+}
+
+footer {
+    background-color: #f1f1f1;
+    margin-top: auto;
+    padding: 1rem;
+    text-align: center;
+}
+
+.navbar {
+    background-color: #007bff;
+}
+
+.navbar-brand {
+    color: white;
+    font-weight: bold;
+}
+
+#downloadBtn {
+    display: none;
+    margin-top: 15px;
+}
+
+#progressBar {
+    background-color: #28a745;
+    border-radius: 8px;
+    height: 20px;
+    width: 0%;
+}
+
 #progressContainer {
     display: none;
     margin-top: 20px;
 }
-#progressBar {
-    width: 0%;
-    height: 20px;
-    background-color: #4caf50;
-}
+
 #progressWrapper {
+    background-color: #e9ecef;
+    border-radius: 8px;
+    overflow: hidden;
     width: 100%;
-    background-color: #ddd;
-}
-#downloadBtn {
-    display: none;
-    margin-top: 15px;
 }
