@@ -1,59 +1,137 @@
-html, body{
-    height: 100%;
+/* Colores Pagina */
+
+/* 
+Texto principal: #2c2c2c – Gris oscuro, legible sobre fondos claros.
+
+Texto secundario: #6b6b6b – Gris medio, para descripciones o texto menos importante.
+
+Navbar y Footer (fondo): #ffe0ec – Rosa pastel un poco más fuerte que el fondo, para contrastar suavemente.
+
+Hover / Enlaces activos: #d63384 – Rosa vibrante, usado con moderación para destacar (botones, enlaces).
+
+Enlaces normales: #a61e4d – Rosa más oscuro pero elegante.
+
+Botones secundarios o sutiles: #f8c2d0 – Un rosado intermedio para mantener coherencia sin robar atención.
+*/
+
+/* Fin Colores Pagina*/
+
+
+body {
+    background-color: #fdf2f7; /* Color base suave */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #2c2c2c; /* Texto principal legible */
     margin: 0;
     padding: 0;
 }
-body {
+
+/* Contenedor principal para botones de conversión */
+.card-container {
     display: flex;
-    flex-direction: column;
-    background-color: #d2e5f8;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 2rem;
 }
 
-.converter {
-    background-color: white;
+.card {
+    background-color: #ffffff;
     border-radius: 12px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.1);
-    margin: 50px auto;
-    max-width: 600px;
-    padding: 30px;
-}
-
-footer {
-    background-color: #f1f1f1;
-    margin-top: auto;
-    padding: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    padding: 1.5rem 2rem;
     text-align: center;
+    transition: transform 0.2s;
+    width: 250px;
 }
 
-.navbar {
-    background-color: #007bff;
+.card:hover {
+    transform: translateY(-5px);
 }
 
-.navbar-brand {
-    color: white;
+.card a {
+    text-decoration: none;
+    color: #a61e4d; /* Enlace normal */
     font-weight: bold;
 }
 
-#downloadBtn {
-    display: none;
-    margin-top: 15px;
+.card a:hover {
+    color: #d63384; /* Hover más vibrante */
 }
 
-#progressBar {
-    background-color: #28a745;
-    border-radius: 8px;
-    height: 20px;
-    width: 0%;
+/* Navbar minimalista */
+.navbar {
+    background-color: #ffe0ec; /* Rosa pastel que contrasta con el fondo */
+    padding: 1rem 0;
+    height: 60px;
+    display: flex;
+    font-size: 12px;
+    border-bottom: 1px solid #f8c2d0; /* Línea suave */
 }
 
-#progressContainer {
-    display: none;
-    margin-top: 20px;
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.25rem;
+    color: #a61e4d;
+    text-decoration: none;
 }
 
-#progressWrapper {
-    background-color: #e9ecef;
-    border-radius: 8px;
-    overflow: hidden;
-    width: 100%;
+.navbar-brand:hover {
+    color: #d63384;
 }
+
+.nav-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 1.5rem;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #a61e4d;
+    font-weight: 500;
+}
+
+.nav-links a:hover {
+    color: #d63384;
+}
+
+/* Footer */
+footer {
+    background-color: #ffe0ec; /* Misma lógica que navbar */
+    color: #2c2c2c;
+    padding: 2rem 0;
+    text-align: center;
+    margin-top: 4rem;
+}
+
+footer a {
+    color: #a61e4d;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* Estructura para que el footer esté al fondo si hay poco contenido */
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+.logo {
+    width: 150px; /* Ajusta el tamaño a 100px de ancho */
+    height: 30px; /* Mantiene la proporción del logo */
+}
+
+
