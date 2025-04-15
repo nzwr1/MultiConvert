@@ -61,13 +61,22 @@ body {
 /* Navbar minimalista */
 .navbar {
     background-color: #ffe0ec; /* Rosa pastel que contrasta con el fondo */
-    padding: 1rem 0;
-    height: 60px;
     display: flex;
+    justify-content: space-between;
+    height: 60px; /* Mantén esta altura para el navbar */
+    align-items: center; /* Asegura que los elementos estén centrados verticalmente */
     font-size: 12px;
     border-bottom: 1px solid #f8c2d0; /* Línea suave */
 }
 
+/* Estilo para el logo */
+.navbar img {
+    height: 120px; /* Ajusta el tamaño del logo (ajusté la altura para que se mantenga dentro del navbar) */
+    width: 150px; /* Mantiene la relación de aspecto del logo */
+    transform: translateX(-60px) translateY(-40px);
+}
+
+/* Estilo para la marca */
 .navbar-brand {
     font-weight: bold;
     font-size: 1.25rem;
@@ -79,12 +88,14 @@ body {
     color: #d63384;
 }
 
+/* Estilo para los enlaces de navegación */
 .nav-links {
     list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
     gap: 1.5rem;
+    transform: translateY(-40px);
 }
 
 .nav-links a {
@@ -96,6 +107,7 @@ body {
 .nav-links a:hover {
     color: #d63384;
 }
+
 
 /* Footer */
 footer {
