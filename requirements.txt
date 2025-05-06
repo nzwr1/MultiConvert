@@ -5,3 +5,4 @@ moviepy==2.1.2
 pydub==0.25.1
 werkzeug==3.0.4
 pdf2image==1.17.0
+gunicorn
