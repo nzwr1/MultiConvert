@@ -1,68 +1,81 @@
 <!DOCTYPE html>
-  <html lang="es">
-    <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      
-      <!-- Título más SEO-friendly -->
-      <title>Convertir PDF a Word Online Gratis | MultiConvert</title>
-      
-      <!-- Meta descripción -->
-      <meta name="description" content="Convierte archivos PDF a Word gratis, rápido y sin registrarte. Herramienta online segura y sencilla. Compatible con todos los navegadores.">
-    
-      <!-- Etiquetas Open Graph para compartir en redes -->
-      <meta property="og:title" content="Convertir PDF a Word Online Gratis | MultiConvert" />
-      <meta property="og:description" content="Convierte archivos PDF a Word gratis, rápido y desde tu navegador." />
-      <meta property="og:image" content="https://tusitio.com/static/preview.png" />
-      <meta property="og:url" content="https://tusitio.com/pdf" />
-      <meta property="og:type" content="website" />
-    
-      <!-- Favicon y estilos -->
-      <link rel="icon" href="/static/favicon.png" type="image/png">
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-      <link rel="stylesheet" href="/static/styles.css" />
-    </head>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Título más SEO-friendly -->
+    <title>Convertir PDF a Word Online Gratis | MultiConvert</title>
+
+    <!-- Meta descripción -->
+    <meta name="description" content="Convierte archivos PDF a Word gratis, rápido y sin registrarte. Herramienta online segura y sencilla. Compatible con todos los navegadores.">
+
+    <!-- Etiquetas Open Graph -->
+    <meta property="og:title" content="Convertir PDF a Word Online Gratis | MultiConvert" />
+    <meta property="og:description" content="Convierte archivos PDF a Word gratis, rápido y desde tu navegador." />
+    <meta property="og:image" content="https://tusitio.com/static/preview.png" />
+    <meta property="og:url" content="https://multiconvert.onrender.com/pdf_to_word_page" />
+    <meta property="og:type" content="website" />
+
+    <!-- Favicon y estilos -->
+    <link rel="icon" href="/static/favicon.png" type="image/png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/styles.css" />
+
+    <!-- Microdatos -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "MultiConvert",
+        "url": "https://tusitio.com/pdf",
+        "description": "Convierte archivos PDF a Word gratis y online",
+        "publisher": {
+          "@type": "Organization",
+          "name": "MultiConvert"
+        }
+      }
+    </script>
+  </head>
   <body>
-  
-<!-- Navbar -->
-<nav class="navbar">
-  <div class="container d-flex justify-content-between align-items-center">
-    <a href="/" class="navbar-brand d-flex align-items-center">
-      <img src="/static/logo.png" alt="Logo MultiConvert" height="150" class="me-2" />
-    </a>
-    <ul class="nav-links">
-      <li><a href="/">Inicio</a></li>
-      <li><a href="{{ url_for('mp4_to_mp3_page') }}">MP4 a MP3</a></li>
-      <li><a href="{{ url_for('compress_page') }}">Compresor</a></li>
-    </ul>
-  </div>
-</nav>
-  
-  
-  <main class="flex-grow-1">
-    <div class="text-center mt-5">
-      <h1 class="mb-4">Convertir PDF a Word</h1>
-      <p>Convertí tus archivos PDF a Word de forma precisa y rápida</p>
-  
-      <!-- Input oculto -->
-      <input type="file" id="pdfFile" accept=".pdf" style="display: none;" onchange="handleFileSelected()">
-  
-      <!-- Contenedor de botones -->
-      <div class="d-flex flex-column align-items-center">
-        <!-- Botón visible para subir -->
-        <button class="btn btn-secondary mb-2" onclick="document.getElementById('pdfFile').click()">Seleccionar archivo PDF</button>
-  
-        <!-- Botón de convertir -->
-        <button class="btn btn-primary" onclick="convertPDF()">Convertir</button>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="container d-flex justify-content-between align-items-center">
+        <a href="/" class="navbar-brand d-flex align-items-center">
+          <img src="/static/logo.png" alt="Logo MultiConvert" height="150" class="me-2" />
+        </a>
+        <ul class="nav-links">
+          <li><a href="/">Inicio</a></li>
+          <li><a href="{{ url_for('mp4_to_mp3_page') }}">MP4 a MP3</a></li>
+          <li><a href="{{ url_for('compress_page') }}">Compresor</a></li>
+        </ul>
       </div>
-  
-      <!-- Texto opcional para mostrar el nombre del archivo -->
-      <p id="fileName" class="mt-2 text-muted"></p>
-  
-      <!-- Estado de la conversión -->
-      <p id="estado" class="mt-2"></p>
-    </div>
-  </main>
+    </nav>
+
+    <!-- Sección principal -->
+    <main class="flex-grow-1">
+      <section class="container text-center mt-5" aria-labelledby="convertTitle">
+        <h1 id="convertTitle" class="mb-4">Convertir PDF a Word</h1>
+        <p>Convierte archivos PDF a Word de forma rápida, segura y gratuita, sin perder formato.</p>
+
+        <!-- Input oculto -->
+        <input type="file" id="pdfFile" accept=".pdf" style="display: none;" onchange="handleFileSelected()">
+
+        <!-- Contenedor de botones -->
+        <div class="d-flex flex-column align-items-center">
+          <button class="btn btn-secondary mb-2" aria-label="Seleccionar archivo PDF" onclick="document.getElementById('pdfFile').click()">Seleccionar archivo PDF</button>
+          <button class="btn btn-primary" aria-label="Iniciar conversión de PDF a Word" onclick="convertPDF()">Convertir</button>
+        </div>
+
+        <!-- Texto para mostrar el nombre del archivo -->
+        <p id="fileName" class="mt-2 text-muted"></p>
+
+        <!-- Estado de la conversión -->
+        <p id="estado" class="mt-2"></p>
+      </section>
+    </main>
+
     <!-- Footer -->
     <footer>
       <div class="container">
@@ -81,14 +94,14 @@
           </div>
           <div class="col-md-4 mb-3">
             <h5>Contacto</h5>
-            <p class="small">Correo: <a href="mailto:contacto@multiconvert.com">contacto@multiconvert.com</a></p>
+            <p class="small">Correo: <a href="mailto:contactomulticonvert@gmail.com">contactomulticonvert@gmail.com</a></p>
             <p class="small">© 2025 MultiConvert. Todos los derechos reservados.</p>
           </div>
         </div>
       </div>
     </footer>
-  
-    <script src="/static/js/pdf_to_word.js"></script>
+
+    <script src="/static/js/pdf_to_word.js" defer></script>
   </body>
-  </html>
+</html>
   
