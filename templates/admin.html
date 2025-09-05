@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Panel Admin</title>
+</head>
+<body>
+    <h2>Panel Admin</h2>
+
+    <h3>Crear usuario</h3>
+    <form method="POST" action="{{ url_for('admin.crear_usuario') }}">
+        Nombre: <input type="text" name="nombre" required><br>
+        Email: <input type="email" name="email" required><br>
+        Contraseña: <input type="password" name="password" required><br>
+        Rol:
+        <select name="rol_id">
+            {% for rol in roles %}
+                <option value="{{ rol.id_roles }}">{{ rol.nombre_roles }}</option>
+            {% endfor %}
+        </select><br>
+        <button type="submit">Crear Usuario</button>
+    </form>
+
+    <h3>Usuarios existentes</h3>
+    <ul>
+        {% for usuario in usuarios %}
+            <li>{{ usuario.nombre_usuario }} - {{ usuario.email }} - {{ usuario.rol.nombre_roles }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

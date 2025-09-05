@@ -9,11 +9,34 @@ from conversion.convert_mp3 import convert_mp4_to_mp3
 from conversion.compress import procesar_archivo
 from moviepy import VideoFileClip
 from conversion.file_cleaner import start_cleanup
+from urllib.parse import quote_plus
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from extensions import db
+
+
+app = Flask(__name__)
+app.secret_key = "clave_secreta_para_sesiones"
+
+# Configuración de la base de datos
+password = quote_plus("682065025468637Nzwr")  # tu contraseña real
+app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql+psycopg2://postgres:{password}@localhost:5432/MultiConvert'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Inicializa SQLAlchemy
+db.init_app(app)
+
+
+# Importar rutas y modelos
+import models
+from routes.admin import admin_bp
+app.register_blueprint(admin_bp)
+
+with app.app_context():
+    db.create_all()  # Crea tablas si no existen
 
 # Inicia el proceso de limpieza al inicio del servidor
 start_cleanup()
-
-app = Flask(__name__)
 CORS(app)
 
 UPLOAD_FOLDER = 'uploads'
@@ -46,6 +69,14 @@ def compress_page():
 @app.route('/pdf_to_jpg_page')
 def pdf_to_jpg_page():
     return render_template('pdf_to_jpg.html')
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+@app.route('/admin')
+def admin():
+    return render_template('admin.html')
 
 #---------------------------- Rutas de conversión de archivos ------------------------#
 
