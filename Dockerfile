@@ -1,5 +1,5 @@
 # Usa una imagen base con Python
-FROM python:3.11
+FROM python:3.11-slim
 
 # Instala LibreOffice y dependencias del sistema
 RUN apt-get update && \
