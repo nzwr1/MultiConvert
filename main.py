@@ -13,6 +13,7 @@ from urllib.parse import quote_plus
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from extensions import db
+from flask import session, redirect, url_for, flash
 
 
 app = Flask(__name__)
@@ -31,9 +32,6 @@ db.init_app(app)
 import models
 from routes.admin import admin_bp
 app.register_blueprint(admin_bp)
-
-with app.app_context():
-    db.create_all()  # Crea tablas si no existen
 
 # Inicia el proceso de limpieza al inicio del servidor
 start_cleanup()
@@ -69,10 +67,6 @@ def compress_page():
 @app.route('/pdf_to_jpg_page')
 def pdf_to_jpg_page():
     return render_template('pdf_to_jpg.html')
-
-@app.route('/login')
-def login():
-    return render_template('login.html')
 
 @app.route('/admin')
 def admin():
@@ -192,6 +186,7 @@ def convert_pdf_to_jpg():
 
     except Exception as e:
         return jsonify({"error": f"Error durante la conversión: {str(e)}"}), 500
+
 
 if __name__ == '__main__':
     app.run(debug=True)

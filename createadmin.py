@@ -8,6 +8,7 @@ with app.app_context():
     db.create_all()
 
     # Crear rol admin si no existe
+    from models import Rol, Usuario
     rol_admin = Rol.query.filter_by(nombre_roles="admin").first()
     if not rol_admin:
         rol_admin = Rol(nombre_roles="admin")
@@ -21,10 +22,11 @@ with app.app_context():
             nombre_usuario="Administrador",
             email="admin@local.com",
             id_roles=rol_admin.id_roles,
-            contrasena=generate_password_hash("admin123")
+            activo=True
         )
+        admin.set_password("admin123")
         db.session.add(admin)
         db.session.commit()
-        print("✅ Usuario admin creado: email=admin@local.com, pass=admin123")
+        print("✅ Admin creado")
     else:
-        print("ℹ️ Ya existe un usuario admin")
+        print("ℹ️ Admin ya existe")

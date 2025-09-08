@@ -1,0 +1,183 @@
+/* Colores Pagina */
+
+/* 
+Texto principal: #2c2c2c – Gris oscuro, legible sobre fondos claros.
+
+Texto secundario: #6b6b6b – Gris medio, para descripciones o texto menos importante.
+
+Navbar y Footer (fondo): #ffe0ec – Rosa pastel un poco más fuerte que el fondo, para contrastar suavemente.
+
+Hover / Enlaces activos: #d63384 – Rosa vibrante, usado con moderación para destacar (botones, enlaces).
+
+Enlaces normales: #a61e4d – Rosa más oscuro pero elegante.
+
+Botones secundarios o sutiles: #f8c2d0 – Un rosado intermedio para mantener coherencia sin robar atención.
+*/
+
+/* Fin Colores Pagina*/
+
+/* Logo Login */
+
+/* Imagen superpuesta arriba */
+.img-login-container {
+  position: absolute;
+  top: -100px;   /* sube la imagen por encima del login */
+  left: 55%;
+  transform: translateX(-38%); /* centra horizontalmente */
+  z-index: 2; /* asegura que esté arriba */
+}
+
+.logo-login {
+    width: 50%; /* Ajusta el tamaño a 100px de ancho */
+    height: 25%; /* Mantiene la proporción original */
+}
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  background: #ffe0ec;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: #fdf2f7;
+}
+
+.login-container {
+  position : relative;
+  background: #030305;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 340px;
+  text-align: center;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px solid #333;
+  margin-bottom: 1rem;
+}
+
+.tab {
+  flex: 1;
+  padding: 0.6rem;
+  background: none;
+  border: none;
+  color: #aaa;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.tab.active {
+  color: #d63384;
+  border-bottom: 3px solid #d63384;
+}
+
+/* Social buttons */
+.social-login {
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem 0;
+}
+
+.social-btn {
+  flex: 1;
+  margin: 0 5px;
+  padding: 0.7rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: 0.3s;
+  color: #fff;
+}
+
+.google { background: #DB4437; }
+
+.social-btn:hover {
+  opacity: 0.85;
+}
+
+/* Divider */
+.divider {
+  margin: 1rem 0;
+  font-size: 0.9rem;
+  color: #999;
+  position: relative;
+}
+.divider::before, .divider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 40%;
+  height: 1px;
+  background: #333;
+}
+.divider::before { left: 0; }
+.divider::after { right: 0; }
+
+/* Form inputs */
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  background: #c0bfc7;
+  margin-bottom: 1rem;
+  padding: 0.6rem;
+  border-radius: 6px;
+  color: #070606;
+}
+
+.input-group i {
+  margin-right: 0.6rem;
+}
+
+.input-group input {
+  border: none;
+  background: none;
+  outline: none;
+  color: #030303;
+  flex: 1;
+}
+
+/* Button */
+.btn-submit {
+  background: #d63384;
+  border: none;
+  padding: 0.8rem;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: 0.3s;
+}
+
+.btn-submit:hover {
+  background: #ffffff;
+}
+
+/* Forgot password */
+.forgot-password {
+  display: block;
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: #d63384;
+  text-decoration: none;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
