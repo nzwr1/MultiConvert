@@ -1,0 +1,44 @@
+{% extends "admin.html" %}
+
+{% block main_content %}
+<h2>Roles</h2>
+
+<input type="text" id="searchRoles" placeholder="Buscar por nombre..." style="margin-bottom:10px; padding:5px; width:200px;">
+
+<form action="{{ url_for('admin.crear_rol') }}" method="POST">
+    <input type="text" name="nombre" placeholder="Nombre del rol" required>
+    <button type="submit">Agregar Rol</button>
+</form>
+
+<table id="tablaRoles">
+    <tr>
+        <th>ID</th><th>Nombre</th><th>Acciones</th>
+    </tr>
+    {% for r in roles %}
+    <tr>
+        <td>{{ r.id_roles }}</td>
+        <td>{{ r.nombre_roles }}</td>
+        <td>
+            <a href="{{ url_for('admin.editar_rol', id=r.id_roles) }}">Editar</a>
+            <form action="{{ url_for('admin.eliminar_rol', id=r.id_roles) }}" method="POST" style="display:inline;">
+                <button type="submit">Eliminar</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<script>
+document.getElementById('searchRoles').addEventListener('input', function() {
+    const filtro = this.value.toLowerCase();
+    const filas = document.querySelectorAll('#tablaRoles tr:not(:first-child)');
+
+    filas.forEach(fila => {
+        const nombre = fila.cells[1].textContent.toLowerCase();
+        fila.style.display = nombre.includes(filtro) ? '' : 'none';
+    });
+});
+</script>
+
+{% endblock %}
+

@@ -1,30 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Panel Admin</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/styles-admin.css" />
+    <title>MultiConvert Admin</title>
 </head>
 <body>
-    <h2>Panel Admin</h2>
+    <nav id="sidebar">
+        <ul>
+            <li>
+                <span class="logo">MultiConvert DB</span>
+            </li>
+            <li>
+                <button class="dropdown-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3">
+                        <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm240-240H200v160h240v-160Zm80 0v160h240v-160H520Zm-80-80v-160H200v160h240Zm80 0h240v-160H520v160ZM200-680h560v-80H200v80Z"/>
+                    </svg>
+                    <span>Tablas</span>
+                    <span class="arrow">▸</span>
+                </button>
+                <ul class="sub-menu">
+                <li><a href="{{ url_for('admin.usuarios_panel') }}">Usuarios</a></li>
+                <li><a href="{{ url_for('admin.roles_panel') }}">Roles</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
 
-    <h3>Crear usuario</h3>
-    <form method="POST" action="{{ url_for('admin.crear_usuario') }}">
-        Nombre: <input type="text" name="nombre" required><br>
-        Email: <input type="email" name="email" required><br>
-        Contraseña: <input type="password" name="password" required><br>
-        Rol:
-        <select name="rol_id">
-            {% for rol in roles %}
-                <option value="{{ rol.id_roles }}">{{ rol.nombre_roles }}</option>
-            {% endfor %}
-        </select><br>
-        <button type="submit">Crear Usuario</button>
-    </form>
-
-    <h3>Usuarios existentes</h3>
-    <ul>
-        {% for usuario in usuarios %}
-            <li>{{ usuario.nombre_usuario }} - {{ usuario.email }} - {{ usuario.rol.nombre_roles }}</li>
-        {% endfor %}
-    </ul>
+    <main>
+    {% block main_content %}{% endblock %}
+    </main>
+    
+    <script>
+    document.querySelectorAll(".dropdown-btn").forEach(button => {
+        button.addEventListener("click", () => {
+            const subMenu = button.nextElementSibling;
+            button.classList.toggle("active");
+            subMenu.classList.toggle("active");
+        });
+    });
+    </script>
 </body>
 </html>

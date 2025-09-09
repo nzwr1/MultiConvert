@@ -1,0 +1,23 @@
+{% extends "admin.html" %}
+
+{% block main_content %}
+<h2>Editar Usuario</h2>
+
+<form action="" method="POST">
+    <input type="text" name="nombre" value="{{ usuario.nombre_usuario }}" required>
+    <input type="email" name="email" value="{{ usuario.email }}" required>
+    <input type="password" name="password" placeholder="Nueva contraseña (opcional)">
+    
+    <select name="rol_id">
+        {% for rol in roles %}
+        <option value="{{ rol.id_roles }}" {% if rol.id_roles == usuario.id_roles %}selected{% endif %}>
+            {{ rol.nombre_roles }}
+        </option>
+        {% endfor %}
+    </select>
+
+    <button type="submit">Actualizar</button>
+</form>
+
+<a href="{{ url_for('admin.usuarios_panel') }}">Cancelar</a>
+{% endblock %}

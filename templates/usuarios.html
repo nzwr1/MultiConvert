@@ -1,0 +1,50 @@
+{% extends "admin.html" %}
+
+{% block main_content %}
+<h2>Usuarios</h2>
+<input type="text" id="searchUsuarios" placeholder="Buscar usuarios..." style="margin-bottom:10px; padding:5px; width:200px;">
+
+<form action="{{ url_for('admin.crear_usuario') }}" method="POST">
+    <input type="text" name="nombre" placeholder="Nombre" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="password" name="password" placeholder="Contraseña" required>
+    <select name="rol_id">
+        {% for rol in roles %}
+        <option value="{{ rol.id_roles }}">{{ rol.nombre_roles }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit">Agregar Usuario</button>
+</form>
+
+<table id="tablaUsuarios">
+    <tr>
+        <th>ID</th><th>Nombre</th><th>Email</th><th>Rol</th><th>Acciones</th>
+    </tr>
+    {% for u in usuarios %}
+    <tr>
+        <td>{{ u.id_usuarios }}</td>
+        <td>{{ u.nombre_usuario }}</td>
+        <td>{{ u.email }}</td>
+        <td>{{ u.rol.nombre_roles }}</td>
+        <td>
+            <a href="{{ url_for('admin.editar_usuario', id=u.id_usuarios) }}">Editar</a>
+            <form action="{{ url_for('admin.eliminar_usuario', id=u.id_usuarios) }}" method="POST" style="display:inline;">
+                <button type="submit">Eliminar</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<script>
+document.getElementById('searchUsuarios').addEventListener('input', function() {
+    const filtro = this.value.toLowerCase();
+    const filas = document.querySelectorAll('#tablaUsuarios tr:not(:first-child)'); // ignorar header
+
+    filas.forEach(fila => {
+        const nombre = fila.cells[1].textContent.toLowerCase(); // columna Nombre
+        fila.style.display = nombre.includes(filtro) ? '' : 'none';
+    });
+});
+</script>
+{% endblock %}
