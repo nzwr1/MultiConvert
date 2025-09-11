@@ -14,6 +14,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from extensions import db
 from flask import session, redirect, url_for, flash
+from models import Conversion
 
 
 app = Flask(__name__)
@@ -68,10 +69,6 @@ def compress_page():
 def pdf_to_jpg_page():
     return render_template('pdf_to_jpg.html')
 
-@app.route('/admin')
-def admin():
-    return render_template('admin.html')
-
 #---------------------------- Rutas de conversión de archivos ------------------------#
 
 @app.route('/word-to-pdf', methods=['POST'])
@@ -112,16 +109,40 @@ def pdf_to_word():
     output_path = os.path.join(RESULT_FOLDER, output_filename)
 
     try:
+        # 🔹 Aquí ocurre la conversión real
         convert_pdf_to_word(input_path, output_path)
+
+        # 🔹 Guardar registro en la base de datos
+        nueva_conversion = Conversion(
+            filename=filename,
+            converted_name=output_filename,
+            type="pdf_to_word",
+            status="success"
+        )
+        db.session.add(nueva_conversion)
+        db.session.commit()
+
+        # 🔹 Enviar el archivo convertido al usuario
         return send_file(
             output_path,
             as_attachment=True,
             mimetype='application/vnd.openxmlformats-officedocument.wordprocessingml.document',
             download_name=output_filename
         )
-    except Exception as e:
-        return jsonify({"error": f"Error durante la conversión: {str(e)}"}), 500
 
+    except Exception as e:
+        # 🔹 Guardar error en la base de datos
+        nueva_conversion = Conversion(
+            filename=filename,
+            converted_name=output_filename,
+            type="pdf_to_word",
+            status="failed"
+        )
+        db.session.add(nueva_conversion)
+        db.session.commit()
+
+        return jsonify({"error": f"Error durante la conversión: {str(e)}"}), 500
+    
 @app.route('/convert_mp3', methods=['POST'])
 def convert_mp3():
     archivo = request.files.get('archivo')

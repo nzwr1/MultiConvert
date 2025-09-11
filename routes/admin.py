@@ -1,6 +1,7 @@
 from flask import Blueprint, request, redirect, url_for, session, render_template, flash
 from models import Usuario, Rol, db
 from werkzeug.security import generate_password_hash, check_password_hash
+from models import Conversion
 
 admin_bp = Blueprint("admin", __name__)
 
@@ -16,7 +17,7 @@ def login():
             if usuario.check_password(password):
                 session["user_id"] = usuario.id_usuarios
                 session["rol"] = usuario.rol.nombre_roles
-                return redirect(url_for("admin.admin_panel"))
+                return redirect(url_for("admin.usuarios_panel"))
         flash("Correo o contraseña incorrectos / No eres admin")
     return render_template("login.html")
 
@@ -37,6 +38,55 @@ def roles_panel():
         return "No autorizado"
     roles = Rol.query.all()
     return render_template("roles.html", roles=roles)
+
+# Panel de conversiones con búsqueda
+@admin_bp.route("/admin/conversions")
+def conversions_panel():
+    if session.get("rol") != "admin":
+        return "No autorizado"
+
+    q = request.args.get("q", "")
+    if q:
+        conversions = Conversion.query.filter(
+            (Conversion.filename.ilike(f"%{q}%")) |
+            (Conversion.converted_name.ilike(f"%{q}%")) |
+            (Conversion.type.ilike(f"%{q}%"))
+        ).order_by(Conversion.created_at.desc()).all()
+    else:
+        conversions = Conversion.query.order_by(Conversion.created_at.desc()).all()
+
+    return render_template("conversions.html", conversions=conversions)
+
+# Editar conversión
+@admin_bp.route("/admin/editar_conversion/<int:id>", methods=["GET", "POST"])
+def editar_conversion(id):
+    if session.get("rol") != "admin":
+        return "No autorizado"
+
+    conv = Conversion.query.get_or_404(id)
+
+    if request.method == "POST":
+        conv.filename = request.form["filename"]
+        conv.converted_name = request.form["converted_name"]
+        conv.type = request.form["type"]
+        conv.status = request.form["status"]
+        db.session.commit()
+        flash("Conversión actualizada")
+        return redirect(url_for("admin.conversions_panel"))
+
+    return render_template("editar_conversion.html", conv=conv)
+
+# Eliminar conversión
+@admin_bp.route("/admin/eliminar_conversion/<int:id>", methods=["POST"])
+def eliminar_conversion(id):
+    if session.get("rol") != "admin":
+        return "No autorizado"
+
+    conv = Conversion.query.get_or_404(id)
+    db.session.delete(conv)
+    db.session.commit()
+    flash("Conversión eliminada")
+    return redirect(url_for("admin.conversions_panel"))
 
 
 # Crear usuario
@@ -140,3 +190,9 @@ def eliminar_rol(id):
     db.session.commit()
     flash("Rol eliminado")
     return redirect(url_for("admin.roles_panel"))
+
+@admin_bp.route("/logout")
+def logout():
+    session.clear()  # limpia toda la sesión
+    flash("Has cerrado sesión")
+    return redirect(url_for("index"))  # redirige al inicio

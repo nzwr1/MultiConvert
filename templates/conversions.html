@@ -1,0 +1,45 @@
+{% extends "admin.html" %}
+
+{% block main_content %}
+<h2>Historial de Conversiones</h2>
+
+<form method="GET" action="{{ url_for('admin.conversions_panel') }}">
+    <input type="text" name="q" placeholder="Buscar por archivo o tipo" value="{{ request.args.get('q', '') }}">
+    <button type="submit">Buscar</button>
+</form>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Archivo Original</th>
+            <th>Archivo Convertido</th>
+            <th>Tipo</th>
+            <th>Estado</th>
+            <th>Fecha</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for conv in conversions %}
+        <tr>
+            <td>{{ conv.id }}</td>
+            <td>{{ conv.filename }}</td>
+            <td>{{ conv.converted_name }}</td>
+            <td>{{ conv.type }}</td>
+            <td>{{ conv.status }}</td>
+            <td>{{ conv.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
+            <td>
+                <a href="{{ url_for('admin.editar_conversion', id=conv.id) }}">Editar</a>
+                |
+                <form action="{{ url_for('admin.eliminar_conversion', id=conv.id) }}" method="POST" style="display:inline;">
+                    <button type="submit" onclick="return confirm('¿Seguro que deseas eliminar esta conversión?');">Eliminar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{{ url_for('admin.usuarios_panel') }}">Volver al panel de usuarios</a>
+{% endblock %}

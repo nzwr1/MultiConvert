@@ -1,0 +1,26 @@
+{% extends "admin.html" %}
+
+{% block main_content %}
+<h2>Editar Conversión</h2>
+
+<form method="POST">
+    <label>Archivo Original:</label>
+    <input type="text" name="filename" value="{{ conv.filename }}" required>
+
+    <label>Archivo Convertido:</label>
+    <input type="text" name="converted_name" value="{{ conv.converted_name }}" required>
+
+    <label>Tipo:</label>
+    <input type="text" name="type" value="{{ conv.type }}" required>
+
+    <label>Estado:</label>
+    <select name="status">
+        <option value="success" {% if conv.status=='success' %}selected{% endif %}>Success</option>
+        <option value="failed" {% if conv.status=='failed' %}selected{% endif %}>Failed</option>
+    </select>
+
+    <button type="submit">Actualizar</button>
+</form>
+
+<a href="{{ url_for('admin.conversions_panel') }}">Cancelar</a>
+{% endblock %}
