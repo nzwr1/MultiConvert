@@ -1,0 +1,71 @@
+{% extends "admin/admin.html" %}
+
+{% block main_content %}
+<h2>Gestión de Usuarios</h2>
+
+<!-- Buscador -->
+<input type="text" id="searchUsuarios" placeholder="Buscar usuarios..." style="margin-bottom:10px; padding:5px; width:200px;">
+
+<!-- Formulario para crear usuario -->
+<form action="{{ url_for('admin.crear_usuario') }}" method="POST" style="margin-bottom: 20px;">
+    <input type="text" name="nombre" placeholder="Nombre" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="password" name="password" placeholder="Contraseña" required>
+    <select name="rol_id">
+        {% for rol in roles %}
+        <option value="{{ rol.id_roles }}">{{ rol.nombre_rol }}</option>  <!-- Cambiado a nombre_rol -->
+        {% endfor %}
+    </select>
+    <button type="submit" class="btn btn-primary">Agregar Usuario</button>
+</form>
+
+<!-- Tabla de usuarios -->
+<table id="tablaUsuarios" class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Rol</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for u in usuarios %}
+        <tr>
+            <td>{{ u.id_usuarios }}</td>
+            <td>{{ u.nombre_usuario }}</td>
+            <td>{{ u.email }}</td>
+            <td>{{ u.rol.nombre_rol }}</td>  <!-- Cambiado a nombre_rol -->
+            <td>
+                {% if u.activo %}
+                    <span class="badge bg-success">Activo</span>
+                {% else %}
+                    <span class="badge bg-danger">Inactivo</span>
+                {% endif %}
+            </td>
+            <td>
+                <a href="{{ url_for('admin.editar_usuario', id=u.id_usuarios) }}" class="btn btn-sm btn-warning">Editar</a>
+                <form action="{{ url_for('admin.eliminar_usuario', id=u.id_usuarios) }}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de eliminar este usuario?')">Eliminar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+document.getElementById('searchUsuarios').addEventListener('input', function() {
+    const filtro = this.value.toLowerCase();
+    const filas = document.querySelectorAll('#tablaUsuarios tbody tr');
+    
+    filas.forEach(fila => {
+        const nombre = fila.cells[1].textContent.toLowerCase();
+        const email = fila.cells[2].textContent.toLowerCase();
+        fila.style.display = (nombre.includes(filtro) || email.includes(filtro)) ? '' : 'none';
+    });
+});
+</script>
+{% endblock %}

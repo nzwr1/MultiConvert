@@ -1,0 +1,59 @@
+{% extends "admin/admin.html" %}
+
+{% block main_content %}
+<h2>Gestión de Roles</h2>
+
+<!-- Formulario para crear o editar rol -->
+{% if rol_editar %}
+<form action="{{ url_for('admin.editar_rol', id=rol_editar.id_roles) }}" method="POST" style="margin-bottom: 20px;">
+    <div class="input-group" style="max-width: 400px;">
+        <input type="text" name="nombre" value="{{ rol_editar.nombre_rol }}" class="form-control" required>
+        <button type="submit" class="btn btn-success">Guardar Cambios</button>
+        <a href="{{ url_for('admin.editar_rol') }}" class="btn btn-secondary">Cancelar</a>
+    </div>
+</form>
+{% else %}
+<form action="{{ url_for('admin.crear_rol') }}" method="POST" style="margin-bottom: 20px;">
+    <div class="input-group" style="max-width: 400px;">
+        <input type="text" name="nombre" placeholder="Nombre del nuevo rol" class="form-control" required>
+        <button type="submit" class="btn btn-primary">Crear Rol</button>
+    </div>
+</form>
+{% endif %}
+
+<!-- Tabla de roles -->
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre del Rol</th>
+            <th>Número de Usuarios</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+<tbody>
+    {% for item in roles_conteo %}
+    <tr>
+        <td>{{ item.rol.id_roles }}</td>
+        <td>{{ item.rol.nombre_rol }}</td>
+        <td>
+            <span class="badge bg-{{ 'primary' if item.user_count > 0 else 'secondary' }}">
+                {{ item.user_count }} usuario(s)
+            </span>
+        </td>
+        <td>
+            <a href="{{ url_for('admin.editar_rol', id=item.rol.id_roles) }}" class="btn btn-sm btn-warning">
+                <i class="fas fa-edit"></i> Editar
+            </a>
+            <form action="{{ url_for('admin.eliminar_rol', id=item.rol.id_roles) }}" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-sm btn-danger" 
+                        onclick="return confirm('¿Estás seguro de eliminar el rol \"{{ item.rol.nombre_rol }}\"?')">
+                    <i class="fas fa-trash"></i> Eliminar
+                </button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+{% endblock %}

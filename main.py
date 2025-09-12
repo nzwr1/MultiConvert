@@ -15,6 +15,9 @@ from flask_sqlalchemy import SQLAlchemy
 from extensions import db
 from flask import session, redirect, url_for, flash
 from models import Conversion
+from datetime import datetime, timedelta
+from models import Plan, Pago, Suscripcion
+import random
 
 
 app = Flask(__name__)
@@ -68,6 +71,14 @@ def compress_page():
 @app.route('/pdf_to_jpg_page')
 def pdf_to_jpg_page():
     return render_template('pdf_to_jpg.html')
+
+@app.route('/login')
+def login_page():
+    return render_template('login.html')
+
+@app.route('/register')
+def register_page():
+    return render_template('register.html')
 
 #---------------------------- Rutas de conversión de archivos ------------------------#
 
@@ -207,9 +218,121 @@ def convert_pdf_to_jpg():
 
     except Exception as e:
         return jsonify({"error": f"Error durante la conversión: {str(e)}"}), 500
+    
+    # -------------------- Rutas de usuario -------------------- #
+
+@app.route('/perfil')
+def user_profile():
+    if 'user_id' not in session:
+        flash('Debes iniciar sesión para acceder a tu perfil', 'warning')
+        return redirect(url_for('login_page'))
+    
+    from models import Usuario
+    usuario = Usuario.query.get(session['user_id'])
+    return render_template('user_profile.html', usuario=usuario)
+
+@app.route('/mis-conversiones')
+def my_conversions():
+    if 'user_id' not in session:
+        flash('Debes iniciar sesión para ver tus conversiones', 'warning')
+        return redirect(url_for('login_page'))
+    
+    from models import Conversion
+    conversiones = Conversion.query.filter_by(id_usuarios=session['user_id']).all()
+    return render_template('my_conversions.html', conversiones=conversiones)
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    flash('Has cerrado sesión', 'info')
+    return redirect(url_for('index'))
+
+# -------------------- Rutas de autenticación -------------------- #
+
+@app.route('/login', methods=['GET', 'POST'])
+def user_login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        
+        from models import Usuario
+        usuario = Usuario.query.filter_by(email=email, activo=True).first()
+        if usuario and usuario.check_password(password):
+            session['user_id'] = usuario.id_usuarios
+            session['email'] = usuario.email
+            session['rol'] = usuario.rol.nombre_rol if usuario.rol else None
+            flash('Inicio de sesión exitoso', 'success')
+            return redirect(url_for('index'))
+        
+        flash('Credenciales incorrectas', 'danger')
+    
+    return render_template('login.html')
+
+@app.route("/suscribirse", methods=["GET", "POST"])
+def suscribirse():
+    if "user_id" not in session:
+        flash("Debes iniciar sesión para suscribirte.", "warning")
+        return redirect(url_for("login_page"))
+
+    usuario_id = session["user_id"]  # <-- Mueve esto aquí, después de la validación
+    print("¿Usuario logueado?", "user_id" in session)
+
+    planes = Plan.query.all()
+    if request.method == "POST":
+        plan_id = request.form.get("plan_id")
+        if not plan_id:
+            flash("Debes seleccionar un plan.", "danger")
+            return redirect(url_for("suscribirse"))
+
+        try:
+            plan_id_int = int(plan_id)
+        except ValueError:
+            flash("Plan inválido.", "danger")
+            return redirect(url_for("suscribirse"))
+
+        plan = Plan.query.get(plan_id_int)
+        if not plan:
+            flash("Plan no encontrado.", "danger")
+            return redirect(url_for("suscribirse"))
+        print("Entrando a la creación de pago y suscripción")
+
+        try:
+            print("Creando pago...")
+            numero_orden = f"ORD-{random.randint(100000, 999999)}"
+            pago = Pago(
+                id_usuarios=usuario_id,
+                monto=plan.precio,
+                fecha_pago=datetime.now(),
+                metodo_pago="simulado",
+                estado="pagado",
+                numero_orden=numero_orden
+            )
+            db.session.add(pago)
+            db.session.flush()
+            print("Pago creado con id:", pago.id_pagos)
+
+            print("Creando suscripción...")
+            suscripcion = Suscripcion(
+                id_usuarios=usuario_id,
+                id_planes=plan.id_planes,
+                fecha_inicio=datetime.now(),
+                fecha_fin=datetime.now() + timedelta(days=plan.duracion_dias)
+            )
+            db.session.add(suscripcion)
+            db.session.commit()
+            print("Suscripción creada con id:", suscripcion.id_suscripcion)
+            flash("¡Pago simulado y suscripción creada con éxito!", "success")
+            return redirect(url_for("index"))
+        except Exception as e:
+            db.session.rollback()
+            print("Error al guardar:", e)
+            flash(f"Error al guardar la suscripción: {str(e)}", "danger")
+            return redirect(url_for("suscribirse"))
+
+    return render_template("suscribirse.html", planes=planes)
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == '__main__':  
+    app.run(debug=True) 
 
 

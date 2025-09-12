@@ -1,0 +1,62 @@
+{% extends "admin/admin.html" %}
+
+{% block main_content %}
+<h2>Gestión de Roles</h2>
+
+<!-- Formulario para crear rol -->
+<form action="{{ url_for('admin.crear_rol') }}" method="POST" style="margin-bottom: 20px;">
+    <div class="input-group" style="max-width: 400px;">
+        <input type="text" name="nombre" placeholder="Nombre del nuevo rol" class="form-control" required>
+        <button type="submit" class="btn btn-primary">Crear Rol</button>
+    </div>
+</form>
+
+<!-- Tabla de roles -->
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre del Rol</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if roles %}
+            {% for rol in roles %}
+            <tr>
+                <td>{{ rol.id_roles }}</td>
+                <td>{{ rol.nombre_rol }}</td>
+                <td>
+                    <a href="{{ url_for('admin.editar_rol', id=rol.id_roles) }}" class="btn btn-sm btn-warning">
+                        <i class="fas fa-edit"></i> Editar
+                    </a>
+                    <form action="{{ url_for('admin.eliminar_rol', id=rol.id_roles) }}" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-sm btn-danger" 
+                                onclick="return confirm('¿Estás seguro de eliminar el rol \"{{ rol.nombre_rol }}\"?')">
+                            <i class="fas fa-trash"></i> Eliminar
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="3" class="text-center">No hay roles registrados</td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>
+
+<!-- DEBUG: Para ver qué datos estamos recibiendo -->
+<div style="display: none;"> <!-- Oculta este bloque en producción -->
+    <h4>DEBUG Info:</h4>
+    <p>Roles recibidos: {{ roles|length }}</p>
+    <p>Primer rol: {{ roles[0] if roles else 'None' }}</p>
+    {% if roles %}
+        {% for rol in roles %}
+            <p>Rol {{ loop.index }}: ID={{ rol.id_roles }}, Nombre={{ rol.nombre_rol }}</p>
+        {% endfor %}
+    {% endif %}
+</div>
+
+{% endblock %}
